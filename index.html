@@ -30,13 +30,14 @@
         background-color: white;
         border-radius: 5px;
       }
+      .top { top: 0; }
+      .bottom { bottom: 0; }
       #bar {
+        text-align: center;
         color: white;
         background-color: rgb(0,0,0,.5);
         position: fixed;
         z-index: 9999;
-        top: 0;
-        right: 0;
         line-height: 50px;
         width: 100%;
       }
@@ -55,10 +56,27 @@
       form {
         padding: 40px;
       }
+      img {
+        height: 32px;
+        width: 32px;
+        padding: 5px;
+      }
+      #attribution {
+        bottom: 0;
+        text-align: center;
+        width: 100%;
+        position: absolute;
+        z-index: 9999;
+      }
     </style>
   </head>
   <body>
-    <div id="bar">
+    <div id="attribution" class="bottom">
+      <a target="_blank" href="http://github.com/karissa/tile-download-ui">
+        <img src="/static/github.png" />
+      </a>
+    </div>
+    <div id="bar" class="top">
       <div id="bar-inner">
         <div id="buttons"></div>
       </div>
