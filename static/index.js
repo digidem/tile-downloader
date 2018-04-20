@@ -1,15 +1,18 @@
 var form = require('get-form-data')
+var StreamSaver = require('StreamSaver')
 var yo = require('yo-yo')
 var mapboxgl = require('mapbox-gl')
 var download = require('./download')
 
-mapboxgl.accessToken = 'pk.eyJ1Ijoia3JtY2tlbHYiLCJhIjoiY2lxbHpscXo5MDBlMGdpamZnN21mOXF3MCJ9.BtXlq8OmTEM8fHqWuxicPQ';
+var accessToken = 'pk.eyJ1Ijoia3JtY2tlbHYiLCJhIjoiY2lxbHpscXo5MDBlMGdpamZnN21mOXF3MCJ9.BtXlq8OmTEM8fHqWuxicPQ';
 
-var maxZoom = 8
+var maxZoom = 2
 
+mapboxgl.accessToken = accessToken
+// TODO: let user pick url source
 var map = new mapboxgl.Map({
   container: 'map',
-  style: 'mapbox://styles/mapbox/streets-v9'
+  style: 'mapbox://styles/mapbox/satellite-v9'
 })
 
 var $overlay = document.getElementById('overlay')
@@ -50,8 +53,14 @@ function getFormData () {
 
 function downloadClick (event) {
   var data = getFormData()
-  download(data)
-  console.log('got', data)
+  download(accessToken, data, function (stream) {
+    closePreview(event)
+    stream.on('error', function (err) {
+      yo.update(controls, yo`<div>Error... <br>${err.toString()}</div>`)
+    })
+    stream.on('end', function () {
+    })
+  })
   event.stopPropagation()
   event.preventDefault()
   return false
@@ -102,7 +111,9 @@ function flyToCoordinates (data) {
 }
 
 function createButtons () {
+  var text = 'Click here to download tiles in this area...'
+  if (!StreamSaver.supported) text = 'Please use the latest version of Google Chrome'
   return yo`<div>
-    <button onclick=${previewDownload}>Ready to Download Tiles? Click here to preview...</button>
+    <button onclick=${StreamSaver.supported ? previewDownload : null}>${text}</button>
   </div>`
 }
