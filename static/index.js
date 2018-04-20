@@ -1,5 +1,5 @@
 var form = require('get-form-data')
-var StreamSaver = require('StreamSaver')
+var StreamSaver = require('streamsaver')
 var yo = require('yo-yo')
 var mapboxgl = require('mapbox-gl')
 var download = require('./download')
