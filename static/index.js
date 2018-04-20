@@ -6,7 +6,7 @@ var download = require('./download')
 
 var accessToken = 'pk.eyJ1Ijoia3JtY2tlbHYiLCJhIjoiY2lxbHpscXo5MDBlMGdpamZnN21mOXF3MCJ9.BtXlq8OmTEM8fHqWuxicPQ';
 
-var maxZoom = 2
+var maxZoom = 8
 
 mapboxgl.accessToken = accessToken
 // TODO: let user pick url source
@@ -96,8 +96,9 @@ function createControls (bbox, minZoom) {
     Max Lat: <input type="text" name="maxLat" value=${bbox[3]} />
     <br>
     <p>Zoom Range</p>
-    <input type="text" name="minZoom" value=${minZoom} />
-    <input type="text" name="maxZoom" value=${maxZoom} />
+    Min Zoom: <input type="text" name="minZoom" value=${minZoom} />
+    <br>
+    Max Zoom: <input type="text" name="maxZoom" value=${maxZoom} />
     <br>
     <p>Estimated Size: TODO</p>
     <button onclick=${closePreview}>Just Kidding</button>
