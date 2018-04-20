@@ -1,18 +1,22 @@
 {
-  "name": "tile-download-server",
+  "name": "tile-download-ui",
   "version": "1.0.0",
-  "description": "A server for downloading map tiles for offline use.",
+  "description": "A user interface for downloading map tiles for offline use.",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/karissa/tile-download-ui.git"
+  },
   "scripts": {
     "start": "http-server",
     "watch": "watchify static/index.js -o static/bundle.js",
-    "build": "browserify -r querystring static/index.js > static/bundle.js"
+    "build": "browserify static/index.js > static/bundle.js"
   },
   "author": "Karissa McKelvey <krmckelv@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "@mapbox/tilejson": "^1.1.0",
-    "@mapbox/tilelive": "^6.0.0",
+    "@mapbox/tilelive": "github:karissa/tilelive",
     "get-form-data": "^2.0.0",
     "mapbox-gl": "^0.44.2",
     "mapbox-style-downloader": "^1.0.0",
