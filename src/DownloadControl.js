@@ -72,7 +72,7 @@ DownloadControl.prototype._render = function () {
   }
   var onDownload = this.options.onDownload || this._onDownload.bind(this)
 
-  ReactDOM.render(<Options
+  ReactDOM.render(<DownloadOptionBox
     IBBox={IBBox}
     minZoom={map.getZoom()}
     onChange={this._handleChangeOptions}
@@ -85,7 +85,7 @@ DownloadControl.prototype.onRemove = function () {
   this._container = null
 }
 
-class Options extends React.Component {
+class DownloadOptionBox extends React.Component {
   static propTypes = {
     onDownload: PropTypes.func.isRequired,
     IBBox: PropTypes.object.isRequired,
@@ -113,9 +113,11 @@ class Options extends React.Component {
 
   _keyPress (event) {
     if (event.key === 'Enter') {
-      console.log(this.state)
-      debugger
+      this.onChange(data)
     }
+    event.stopPropagation()
+    event.preventDefault()
+    return false
   }
 
   estimatedSize (IBBox, minZoom, maxZoom) {
