@@ -146,8 +146,8 @@ class DownloadOptionBox extends React.Component {
 
   render () {
     var IBBox = this.state.IBBox
-    var minZoom = Math.round(this.state.minZoom || 0)
-    var maxZoom = Math.round(this.state.maxZoom || this.state.minZoom + 1)
+    var minZoom = Math.floor(this.state.minZoom || 0)
+    var maxZoom = Math.floor(this.state.maxZoom || this.state.minZoom + 1)
 
     function onSubmit (event) {
       event.preventDefault()
