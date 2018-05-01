@@ -7,7 +7,6 @@ var mapboxgl = require('mapbox-gl')
 var download = require('./download')
 
 var accessToken = 'pk.eyJ1Ijoia3JtY2tlbHYiLCJhIjoiY2lxbHpscXo5MDBlMGdpamZnN21mOXF3MCJ9.BtXlq8OmTEM8fHqWuxicPQ';
-var maxZoom = 8
 mapboxgl.accessToken = accessToken
 const bingSource = {
   type: 'raster',
@@ -80,7 +79,7 @@ function getMapBbox (bbox) {
 }
 
 function getFormData () {
-  var el = document.querySelector('form')
+  var el = document.querySelector('form#options')
   var data = form.default(el)
   Object.keys(data).map(function (key) {
     data[key] = Number(data[key])
@@ -97,23 +96,14 @@ function getUrl (source) {
 }
 
 function downloadClick (event) {
-  // TODO: pick currently shown underlay
   var sources = map.getStyle().sources
   var selected = Object.keys(sources).reduce((acc, k) => {
     if (map.isSourceLoaded(k)) acc.push(k)
     return acc
   }, [])
-  if (!selected.length) {
-    alert('You need to select a map background source.')
-    return false
-  }
   var selectedSource = sources[selected[0]]
   var data = getFormData()
   var url = getUrl(selectedSource)
-  if (!url) {
-    alert('Could not figure out that background source.')
-    return false
-  }
   download(url, data, function (stream) {
     closePreview(event)
     stream.on('error', function (err) {
@@ -146,7 +136,7 @@ function createControls (bbox, minZoom) {
   if (!minZoom) map.getZoom()
   var maxZoomEl = document.querySelector('input[name="maxZoom"]')
   if (maxZoomEl) maxZoom = maxZoomEl.value
-  return yo`<form onsubmit=${downloadClick}>
+  return yo`<form id="options" onsubmit=${downloadClick}>
     <p>Bounding Box</p>
     Min Lng: <input type="text" name="minLng" value=${bbox[0]}/>
     <br>
@@ -159,7 +149,7 @@ function createControls (bbox, minZoom) {
     <p>Zoom Range</p>
     Min Zoom: <input type="text" name="minZoom" value=${minZoom} />
     <br>
-    Max Zoom: <input type="text" name="maxZoom" value=${maxZoom} />
+    Max Zoom: <input type="text" name="maxZoom" value=${minZoom} />
     <br>
     <p>Estimated Size: TODO</p>
     <button onclick=${closePreview}>Just Kidding</button>

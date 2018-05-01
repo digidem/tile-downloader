@@ -9,7 +9,7 @@ require('tilelive-tar').registerProtocols(tilelive)
 */
 
 module.exports = function (url, data, cb) {
-  tilelive.load('tilejson+' + url, function (err, source) {
+  tilelive.load(url, function (err, source) {
     if (err) throw err
     tilelive.load('tar://tiles.png', function (err, sink) {
       if (err) throw err
