@@ -1,4 +1,5 @@
 var form = require('get-form-data')
+var normalizeSourceURL = require('mapbox-style-downloader/lib/mapbox').normalizeSourceURL
 var StreamSaver = require('streamsaver')
 var yo = require('yo-yo')
 var mapboxgl = require('mapbox-gl')
@@ -52,8 +53,9 @@ function getFormData () {
 }
 
 function downloadClick (event) {
+  var url = normalizeSourceURL('mapbox://mapbox.satellite', accessToken)
   var data = getFormData()
-  download(accessToken, data, function (stream) {
+  download(url, data, function (stream) {
     closePreview(event)
     stream.on('error', function (err) {
       yo.update(controls, yo`<div>Error... <br>${err.toString()}</div>`)
@@ -104,11 +106,6 @@ function createControls (bbox, minZoom) {
     <button onclick=${closePreview}>Just Kidding</button>
     <button type="submit">Start Downloading</button>
   </from>`
-}
-
-function flyToCoordinates (data) {
-  map.fitBounds([[data.minLng, data.minLat], [data.maxLng, data.maxLat]])
-  map.setZoom(data.minZoom)
 }
 
 function createButtons () {
