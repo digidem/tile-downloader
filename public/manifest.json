@@ -1,0 +1,6 @@
+{
+  "short_name": "tile_download_ui",
+  "name": "Tile Download UI",
+  "start_url": "./index.html",
+  "display": "standalone"
+}
