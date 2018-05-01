@@ -1,8 +1,10 @@
-var React = require('react')
-var Options = require('./options')
-var StreamSaver = require('streamsaver')
+import DownloadControl from './options'
+import MapboxglLayerControl from '@digidem/mapbox-gl-layers'
+import mapboxgl from 'mapbox-gl'
+import React from 'react'
+import StreamSaver from 'streamsaver'
 
-export class App extends React.Component {
+export default class App extends React.Component {
   static defaultProps = {
     showOverlay: false,
     map: null
@@ -10,8 +12,8 @@ export class App extends React.Component {
 
   constructor (props) {
     super(props)
-
   }
+
   componentDidMount () {
     var accessToken = 'pk.eyJ1Ijoia3JtY2tlbHYiLCJhIjoiY2lxbHpscXo5MDBlMGdpamZnN21mOXF3MCJ9.BtXlq8OmTEM8fHqWuxicPQ';
     mapboxgl.accessToken = accessToken
@@ -57,31 +59,29 @@ export class App extends React.Component {
 
       var layerControl = new MapboxglLayerControl({underlays})
       map.addControl(layerControl, 'bottom-right')
+      var downloadControl = new DownloadControl()
+      map.addControl(downloadControl, 'bottom-left')
     })
-  }
-
-  previewDownload () {
 
   }
 
   render () {
     var text = 'Click here to download tiles in this area...'
     if (!StreamSaver.supported) text = 'Please use the latest version of Google Chrome'
-    return <body onclick={this.closePreview}>
-      <div id='bar' class='top'>
+    return (
+    <div>
+      <div id='bar' className='top'>
         <div id='bar-inner'>
-          <div id='buttons'>
-            <button onclick={StreamSaver.supported ? this.previewDownload : null}>{text}</button>
-          </div>
+          {StreamSaver.supported ? '' : <div id='buttons'>{text}</div>}
         </div>
       </div>
-      {!this.showOverlay ? '' : <div id='overlay'><Options map={this.map}/> </div>}
       <div id="map"></div>
-      <div id='attribution' class='bottom'>
+      <div id='attribution' className='bottom'>
         <a target='_blank' href='http://github.com/karissa/tile-download-ui'>
-          <img src='/static/github.png' />
+          <img src='github.png' />
         </a>
       </div>
-    </body>
+    </div>
+  )
   }
 }

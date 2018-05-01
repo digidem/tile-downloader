@@ -8,9 +8,10 @@
     "url": "https://github.com/karissa/tile-download-ui.git"
   },
   "scripts": {
-    "start": "http-server",
-    "watch": "watchify static/index.js -o static/bundle.js",
-    "build": "browserify static/index.js > static/bundle.js"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
   },
   "author": "Karissa McKelvey <krmckelv@gmail.com>",
   "license": "MIT",
@@ -23,16 +24,15 @@
     "mapbox-gl": "^0.44.2",
     "mapbox-style-downloader": "^1.0.0",
     "pretty-bytes": "^4.0.2",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
     "streamsaver": "^1.0.1",
     "tilelive-http": "^0.14.0",
     "tilelive-streaming": "^0.7.7",
     "tilelive-tar": "^1.0.0",
-    "timers": "^0.1.1",
-    "yo-yo": "^1.4.1"
+    "timers": "^0.1.1"
   },
   "devDependencies": {
-    "browserify": "^16.1.1",
-    "http-server": "^0.11.1",
-    "watchify": "^3.11.0"
+    "react-scripts": "^1.1.4"
   }
 }
