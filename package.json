@@ -25,6 +25,7 @@
     "tilelive-http": "^0.14.0",
     "tilelive-streaming": "^0.7.7",
     "tilelive-tar": "^1.0.0",
+    "timers": "^0.1.1",
     "yo-yo": "^1.4.1"
   },
   "devDependencies": {

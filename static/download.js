@@ -1,3 +1,4 @@
+global.setImmediate = require('timers').setImmediate // monkey patch for tilelive-http
 const tilelive = require('tilelive-streaming')(require('@mapbox/tilelive'))
 const StreamSaver = require('streamsaver')
 require('tilelive-http')(tilelive)
