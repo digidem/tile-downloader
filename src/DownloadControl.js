@@ -108,6 +108,11 @@ class DownloadOptionBox extends React.Component {
     Object.keys(data).map(function (key) {
       data[key] = Number(data[key])
     })
+    if (data.minZoom > data.maxZoom) {
+      var min = data.minZoom
+      data.minZoom = data.maxZoom
+      data.maxZoom = min
+    }
     return data
   }
 
