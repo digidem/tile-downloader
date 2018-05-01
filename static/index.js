@@ -89,9 +89,10 @@ function getFormData () {
 }
 
 function getUrl (source) {
-  console.log(source)
-  if (source.tiles) return source.tiles[0]
-  if (source.url) return normalizeSourceURL(source.url, accessToken)
+  if (source.tiles) {
+    var url = source.tiles[0]
+    return url.replace('{quadkey}', '{q}')
+  }
   return false
 }
 

@@ -1,5 +1,6 @@
 const tilelive = require('tilelive-streaming')(require('@mapbox/tilelive'))
 const StreamSaver = require('streamsaver')
+require('tilelive-http')(tilelive)
 require('@mapbox/tilejson').registerProtocols(tilelive)
 require('tilelive-tar').registerProtocols(tilelive)
 
