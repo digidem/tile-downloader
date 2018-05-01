@@ -111,15 +111,6 @@ class DownloadOptionBox extends React.Component {
     return false
   }
 
-  _keyPress (event) {
-    if (event.key === 'Enter') {
-      this.onChange(data)
-    }
-    event.stopPropagation()
-    event.preventDefault()
-    return false
-  }
-
   estimatedSize (IBBox, minZoom, maxZoom) {
     var count = 0
     var bbox = IBBox
@@ -141,17 +132,15 @@ class DownloadOptionBox extends React.Component {
     var IBBox = this.state.IBBox
     var minZoom = Math.round(this.state.minZoom || 0)
     var maxZoom = Math.round(this.state.maxZoom || this.state.minZoom + 1)
-
-    var keyPress = this._keyPress.bind(this)
     return (
       <form id="options" onSubmit={this.onDownloadClick.bind(this)}>
         <p>Bounding Box</p>
-        <Input label='Min Long' name='minLng' onKeyPress={this.keyPress} defaultValue={IBBox.minLng} />
-        <Input label='Min Lat' name='minLat' onKeyPress={this.keyPress} defaultValue={IBBox.minLat} />
-        <Input label='Max Long' name='maxLng' onKeyPress={this.keyPress} defaultValue={IBBox.maxLng} />
-        <Input label='Max Lat' name='maxLat' onKeyPress={this.keyPress} defaultValue={IBBox.maxLat} />
-        <Input label='Min Zoom' name='minZoom' onKeyPress={this.keyPress} defaultValue={minZoom} />
-        <Input label='Max Zoom' name='maxZoom' onKeyPress={this.keyPress} defaultValue={maxZoom} />
+        <Input label='Min Long' name='minLng' defaultValue={IBBox.minLng} />
+        <Input label='Min Lat' name='minLat' defaultValue={IBBox.minLat} />
+        <Input label='Max Long' name='maxLng' defaultValue={IBBox.maxLng} />
+        <Input label='Max Lat' name='maxLat' defaultValue={IBBox.maxLat} />
+        <Input label='Min Zoom' name='minZoom' defaultValue={minZoom} />
+        <Input label='Max Zoom' name='maxZoom' defaultValue={maxZoom} />
         <div>
         <p>Estimated Size: {this.estimatedSize(IBBox, minZoom, maxZoom)}</p>
         <button type="submit">Start Downloading</button>
