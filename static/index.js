@@ -10,10 +10,40 @@ var accessToken = 'pk.eyJ1Ijoia3JtY2tlbHYiLCJhIjoiY2lxbHpscXo5MDBlMGdpamZnN21mOX
 var maxZoom = 8
 
 mapboxgl.accessToken = accessToken
+const userSource = {
+  type: 'raster',
+  tiles: [
+    'https://ecn.t0.tiles.virtualearth.net/tiles/a{quadkey}.jpeg?g=5869',
+    'https://ecn.t1.tiles.virtualearth.net/tiles/a{quadkey}.jpeg?g=5869',
+    'https://ecn.t2.tiles.virtualearth.net/tiles/a{quadkey}.jpeg?g=5869',
+    'https://ecn.t3.tiles.virtualearth.net/tiles/a{quadkey}.jpeg?g=5869'
+  ],
+  minzoom: 1,
+  maxzoom: 21,
+  tileSize: 256
+}
+
+const user = {
+  id: 'user-tile',
+  type: 'raster',
+  source: 'user-tile',
+  layout: {
+    visibility: 'visible'
+  },
+  paint: {
+  }
+}
+
 // TODO: let user pick url source
 var map = new mapboxgl.Map({
   container: 'map',
-  style: 'mapbox://styles/mapbox/satellite-v9'
+  style: 'mapbox://styles/mapbox/satellite-streets-v9'
+})
+
+map.on('style.load', function () {
+  map.setLayoutProperty('mapbox-mapbox-satellite', 'visibility', 'none')
+  map.addSource('user-tile', userSource)
+  map.addLayer(user)
 })
 
 var $overlay = document.getElementById('overlay')
