@@ -15,6 +15,7 @@
   "author": "Karissa McKelvey <krmckelv@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@digidem/mapbox-gl-layers": "^2.0.0",
     "@mapbox/tilejson": "^1.1.0",
     "@mapbox/tilelive": "github:karissa/tilelive",
     "get-form-data": "^2.0.0",

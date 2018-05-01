@@ -1,3 +1,4 @@
+var MapboxglLayerControl = require('@digidem/mapbox-gl-layers')
 var form = require('get-form-data')
 var normalizeSourceURL = require('mapbox-style-downloader/lib/mapbox').normalizeSourceURL
 var StreamSaver = require('streamsaver')
@@ -6,11 +7,9 @@ var mapboxgl = require('mapbox-gl')
 var download = require('./download')
 
 var accessToken = 'pk.eyJ1Ijoia3JtY2tlbHYiLCJhIjoiY2lxbHpscXo5MDBlMGdpamZnN21mOXF3MCJ9.BtXlq8OmTEM8fHqWuxicPQ';
-
 var maxZoom = 8
-
 mapboxgl.accessToken = accessToken
-const userSource = {
+const bingSource = {
   type: 'raster',
   tiles: [
     'https://ecn.t0.tiles.virtualearth.net/tiles/a{quadkey}.jpeg?g=5869',
@@ -23,10 +22,10 @@ const userSource = {
   tileSize: 256
 }
 
-const user = {
-  id: 'user-tile',
+const bing = {
+  id: 'bing',
   type: 'raster',
-  source: 'user-tile',
+  source: 'bing',
   layout: {
     visibility: 'visible'
   },
@@ -34,16 +33,23 @@ const user = {
   }
 }
 
-// TODO: let user pick url source
 var map = new mapboxgl.Map({
   container: 'map',
-  style: 'mapbox://styles/mapbox/satellite-streets-v9'
+  style: {
+    version: 8,
+    sources: {'bing': bingSource},
+    layers: [bing]
+  }
 })
 
 map.on('style.load', function () {
-  map.setLayoutProperty('mapbox-mapbox-satellite', 'visibility', 'none')
-  map.addSource('user-tile', userSource)
-  map.addLayer(user)
+  var underlays = [{
+    name: 'Bing Satellite',
+    ids: ['bing']
+  }]
+
+  var layerControl = new MapboxglLayerControl({underlays})
+  map.addControl(layerControl, 'bottom-right')
 })
 
 var $overlay = document.getElementById('overlay')
@@ -82,9 +88,31 @@ function getFormData () {
   return data
 }
 
+function getUrl (source) {
+  console.log(source)
+  if (source.tiles) return source.tiles[0]
+  if (source.url) return normalizeSourceURL(source.url, accessToken)
+  return false
+}
+
 function downloadClick (event) {
-  var url = normalizeSourceURL('mapbox://mapbox.satellite', accessToken)
+  // TODO: pick currently shown underlay
+  var sources = map.getStyle().sources
+  var selected = Object.keys(sources).reduce((acc, k) => {
+    if (map.isSourceLoaded(k)) acc.push(k)
+    return acc
+  }, [])
+  if (!selected.length) {
+    alert('You need to select a map background source.')
+    return false
+  }
+  var selectedSource = sources[selected[0]]
   var data = getFormData()
+  var url = getUrl(selectedSource)
+  if (!url) {
+    alert('Could not figure out that background source.')
+    return false
+  }
   download(url, data, function (stream) {
     closePreview(event)
     stream.on('error', function (err) {
