@@ -56,7 +56,10 @@ DownloadControl.prototype._update = function () {
 }
 
 DownloadControl.prototype._handleChangeOptions = function (data) {
-  console.log(data)
+  this._map.fitBounds([
+    [data.minLng, data.minLat],
+    [data.maxLng, data.maxLat]
+  ])
 }
 
 DownloadControl.prototype._render = function () {
@@ -75,7 +78,7 @@ DownloadControl.prototype._render = function () {
   ReactDOM.render(<DownloadOptionBox
     IBBox={IBBox}
     minZoom={map.getZoom()}
-    onChange={this._handleChangeOptions}
+    onChange={this._handleChangeOptions.bind(this)}
     onDownload={onDownload} />,
   el)
   return el
@@ -100,11 +103,24 @@ class DownloadOptionBox extends React.Component {
     this.state = this.props
   }
 
-  onDownloadClick (event) {
-    var data = form.default(event.target)
+  _getData (event) {
+    var data = form.default(event.target.parentElement.parentElement)
     Object.keys(data).map(function (key) {
       data[key] = Number(data[key])
     })
+    return data
+  }
+
+  zoomClick (event) {
+    this.state.onChange(this._getData(event))
+    debugger
+    event.preventDefault()
+    event.stopPropagation()
+    return false
+  }
+
+  onDownloadClick (event) {
+    var data = this._getData(event)
     this.state.onDownload(data)
     event.preventDefault()
     event.stopPropagation()
@@ -132,8 +148,14 @@ class DownloadOptionBox extends React.Component {
     var IBBox = this.state.IBBox
     var minZoom = Math.round(this.state.minZoom || 0)
     var maxZoom = Math.round(this.state.maxZoom || this.state.minZoom + 1)
+
+    function onSubmit (event) {
+      event.preventDefault()
+      event.stopPropagation()
+      return false
+    }
     return (
-      <form id="options" onSubmit={this.onDownloadClick.bind(this)}>
+      <form id="options" onSubmit={onSubmit}>
         <p>Bounding Box</p>
         <Input label='Min Long' name='minLng' defaultValue={IBBox.minLng} />
         <Input label='Min Lat' name='minLat' defaultValue={IBBox.minLat} />
@@ -143,7 +165,8 @@ class DownloadOptionBox extends React.Component {
         <Input label='Max Zoom' name='maxZoom' defaultValue={maxZoom} />
         <div>
         <p>Estimated Size: {this.estimatedSize(IBBox, minZoom, maxZoom)}</p>
-        <button type="submit">Start Downloading</button>
+        <button onClick={this.zoomClick.bind(this)}>Zoom to Coordinates</button>
+        <button onClick={this.onDownloadClick.bind(this)} type="submit">Start Downloading</button>
         </div>
       </form>
     );
