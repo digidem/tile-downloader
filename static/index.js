@@ -1,6 +1,7 @@
 var MapboxglLayerControl = require('@digidem/mapbox-gl-layers')
+var utils = require('@yaga/tile-utils')
 var form = require('get-form-data')
-var normalizeSourceURL = require('mapbox-style-downloader/lib/mapbox').normalizeSourceURL
+var bytes = require('pretty-bytes')
 var StreamSaver = require('streamsaver')
 var yo = require('yo-yo')
 var mapboxgl = require('mapbox-gl')
@@ -131,27 +132,46 @@ function closePreview (event) {
   return false
 }
 
+function getTileCount (bbox, minZ, maxZ) {
+  var acc = 0
+  if (!maxZ) maxZ = 0
+  for (let z = minZ; z <= maxZ; z += 1) {
+    const minX = utils.lng2x(bbox.minLng, z)
+    const maxX = utils.lng2x(bbox.maxLng, z)
+    const maxY = utils.lat2y(bbox.minLat, z)
+    const minY = utils.lat2y(bbox.maxLat, z)
+    for (let x = minX; x <= maxX; x += 1) {
+      for (let y = minY; y <= maxY; y += 1) {
+        acc += 1
+      }
+    }
+  }
+  return acc
+}
+
 function createControls (bbox, minZoom) {
   if (!bbox) bbox = getMapBbox()
   if (!minZoom) map.getZoom()
-  var maxZoomEl = document.querySelector('input[name="maxZoom"]')
-  if (maxZoomEl) maxZoom = maxZoomEl.value
+  var IBBox = {
+    minLng: bbox[0],
+    minLat: bbox[1],
+    maxLng: bbox[2],
+    maxLat: bbox[3]
+  }
+  var count = getTileCount(IBBox, minZoom)
   return yo`<form id="options" onsubmit=${downloadClick}>
     <p>Bounding Box</p>
-    Min Lng: <input type="text" name="minLng" value=${bbox[0]}/>
+    Min Lng: <input type="text" name="minLng" value=${IBBox.minLng}/>
     <br>
-    Min Lat: <input type="text" name="minLat" value=${bbox[1]}/>
+    Min Lat: <input type="text" name="minLat" value=${IBBox.minLat}/>
     <br>
-    Max Lng: <input type="text" name="maxLng" value=${bbox[2]} />
+    Max Lng: <input type="text" name="maxLng" value=${IBBox.maxLng} />
     <br>
-    Max Lat: <input type="text" name="maxLat" value=${bbox[3]} />
+    Max Lat: <input type="text" name="maxLat" value=${IBBox.maxLat} />
     <br>
-    <p>Zoom Range</p>
-    Min Zoom: <input type="text" name="minZoom" value=${minZoom} />
+    Zoom: <input type="text" name="minZoom" value=${minZoom} />
     <br>
-    Max Zoom: <input type="text" name="maxZoom" value=${minZoom} />
-    <br>
-    <p>Estimated Size: TODO</p>
+    <p>Estimated Size: ${bytes(count * (6 * 1000))}</p>
     <button onclick=${closePreview}>Just Kidding</button>
     <button type="submit">Start Downloading</button>
   </from>`

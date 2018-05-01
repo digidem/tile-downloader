@@ -1,4 +1,5 @@
 global.setImmediate = require('timers').setImmediate // monkey patch for tilelive-http
+const path = require('path')
 const tilelive = require('tilelive-streaming')(require('@mapbox/tilelive'))
 const StreamSaver = require('streamsaver')
 require('tilelive-http')(tilelive)
@@ -12,7 +13,8 @@ require('tilelive-tar').registerProtocols(tilelive)
 module.exports = function (url, data, cb) {
   tilelive.load(url, function (err, source) {
     if (err) throw err
-    tilelive.load('tar://tiles.png', function (err, sink) {
+    var sinkUrl = 'tar://tiles' + path.extname(url)
+    tilelive.load(sinkUrl, function (err, sink) {
       if (err) throw err
       var fileStream = StreamSaver.createWriteStream('tiles.tar')
       var writer = fileStream.getWriter()
@@ -22,7 +24,7 @@ module.exports = function (url, data, cb) {
       var bounds = [data.minLng, data.minLat, data.maxLng, data.maxLat]
       var stream = source.createReadStream({
         minzoom: data.minZoom,
-        maxzoom: data.maxZoom,
+        maxzoom: data.maxZoom || data.minZoom + 1,
         bounds: bounds
       }).pipe(sink.createWriteStream())
 
