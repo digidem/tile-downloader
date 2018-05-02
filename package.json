@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "http-server public",
-    "watch": "watchify src/index.js -o public/bundle.js", 
+    "watch": "watchify src/index.js -o public/bundle.js",
     "build": "node build.js"
   },
   "browserify": {
@@ -18,7 +18,8 @@
         "babelify",
         {
           "presets": [
-            "es2015", "react"
+            "es2015",
+            "react"
           ]
         }
       ]
@@ -44,6 +45,7 @@
     "timers": "^0.1.1"
   },
   "devDependencies": {
+    "babel-core": "^6.26.3",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "browserify": "^16.1.1",
