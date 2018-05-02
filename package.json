@@ -8,10 +8,21 @@
     "url": "https://github.com/karissa/tile-download-ui.git"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "start": "http-server public",
+    "watch": "watchify src/index.js -o public/bundle.js", 
+    "build": "node build.js"
+  },
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            "es2015", "react"
+          ]
+        }
+      ]
+    ]
   },
   "author": "Karissa McKelvey <krmckelv@gmail.com>",
   "license": "MIT",
@@ -20,9 +31,9 @@
     "@mapbox/tilejson": "^1.1.0",
     "@mapbox/tilelive": "github:karissa/tilelive",
     "@yaga/tile-utils": "^1.0.0",
+    "babelify": "^8.0.0",
     "get-form-data": "^2.0.0",
     "mapbox-gl": "^0.44.2",
-    "mapbox-style-downloader": "^1.0.0",
     "pretty-bytes": "^4.0.2",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
@@ -33,6 +44,10 @@
     "timers": "^0.1.1"
   },
   "devDependencies": {
-    "react-scripts": "^1.1.4"
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "browserify": "^16.1.1",
+    "http-server": "^0.11.1",
+    "watchify": "^3.11.0"
   }
 }

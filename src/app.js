@@ -5,15 +5,6 @@ import React from 'react'
 import StreamSaver from 'streamsaver'
 
 export default class App extends React.Component {
-  static defaultProps = {
-    showOverlay: false,
-    map: null
-  }
-
-  constructor (props) {
-    super(props)
-  }
-
   componentDidMount () {
     var accessToken = 'pk.eyJ1Ijoia3JtY2tlbHYiLCJhIjoiY2lxbHpscXo5MDBlMGdpamZnN21mOXF3MCJ9.BtXlq8OmTEM8fHqWuxicPQ';
     mapboxgl.accessToken = accessToken

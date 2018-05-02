@@ -89,15 +89,6 @@ DownloadControl.prototype.onRemove = function () {
 }
 
 class DownloadOptionBox extends React.Component {
-  static propTypes = {
-    onDownload: PropTypes.func.isRequired,
-    IBBox: PropTypes.object.isRequired,
-    onChange: PropTypes.func.isRequired,
-    minZoom: PropTypes.number,
-    maxZoom: PropTypes.number,
-    url: PropTypes.string
-  }
-
   constructor (props) {
     super(props)
     this.state = this.props
@@ -116,9 +107,22 @@ class DownloadOptionBox extends React.Component {
     return data
   }
 
+  onChange (event) {
+    var data = this._getData(event)
+    this.setState({
+      IBBox: {
+        minLat: data.minLat,
+        maxLat: data.maxLat,
+        maxLng: data.maxLng,
+        minLng: data.minLng
+      },
+      minZoom: data.minZoom,
+      maxZoom: data.maxZoom
+    })
+  }
+
   zoomClick (event) {
     this.state.onChange(this._getData(event))
-    debugger
     event.preventDefault()
     event.stopPropagation()
     return false
@@ -160,28 +164,37 @@ class DownloadOptionBox extends React.Component {
       return false
     }
     return (
-      <form id="options" onSubmit={onSubmit}>
+      <form id='options' onSubmit={onSubmit}>
         <p>Bounding Box</p>
         <Input label='Min Long' name='minLng' defaultValue={IBBox.minLng} />
         <Input label='Min Lat' name='minLat' defaultValue={IBBox.minLat} />
         <Input label='Max Long' name='maxLng' defaultValue={IBBox.maxLng} />
         <Input label='Max Lat' name='maxLat' defaultValue={IBBox.maxLat} />
-        <Input label='Min Zoom' name='minZoom' defaultValue={minZoom} />
-        <Input label='Max Zoom' name='maxZoom' defaultValue={maxZoom} />
+        <Input label='Min Zoom' name='minZoom' onChange={this.onChange.bind(this)} defaultValue={minZoom} />
+        <Input label='Max Zoom' name='maxZoom' onChange={this.onChange.bind(this)} defaultValue={maxZoom} />
         <div>
-        <p>Estimated Size: {this.estimatedSize(IBBox, minZoom, maxZoom)}</p>
-        <button onClick={this.zoomClick.bind(this)}>Zoom to Coordinates</button>
-        <button onClick={this.onDownloadClick.bind(this)} type="submit">Start Downloading</button>
+          <p>Estimated Size: {this.estimatedSize(IBBox, minZoom, maxZoom)}</p>
+          <button onClick={this.zoomClick.bind(this)}>Zoom to Coordinates</button>
+          <button onClick={this.onDownloadClick.bind(this)} type='submit'>Start Downloading</button>
         </div>
       </form>
-    );
+    )
   }
+}
+
+DownloadOptionBox.propTypes = {
+  onDownload: PropTypes.func.isRequired,
+  IBBox: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired,
+  minZoom: PropTypes.number,
+  maxZoom: PropTypes.number,
+  url: PropTypes.string
 }
 
 function Input (props) {
   return (
     <div>
-      {props.label} <input type="text" name={props.name} onKeyPress={props.onKeyPress} defaultValue={props.defaultValue} />
+      {props.label} <input type='text' name={props.name} onChange={props.onChange} defaultValue={props.defaultValue} />
     </div>
   )
 }
