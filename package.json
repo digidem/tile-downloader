@@ -2,15 +2,15 @@
   "name": "tile-download-ui",
   "version": "1.0.0",
   "description": "A user interface for downloading map tiles for offline use.",
-  "main": "index.js",
+  "main": "app.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/karissa/tile-download-ui.git"
   },
   "scripts": {
     "start": "http-server public",
-    "watch": "watchify src/index.js -o public/bundle.js",
-    "build": "node build.js"
+    "watch": "watchify index.js -o public/bundle.js",
+    "build": "browserify index.js > public/bundle.js"
   },
   "browserify": {
     "transform": [
@@ -29,22 +29,13 @@
   "license": "MIT",
   "dependencies": {
     "@digidem/mapbox-gl-layers": "^2.0.0",
-    "@mapbox/tilejson": "^1.1.0",
-    "@mapbox/tilelive": "github:karissa/tilelive",
-    "@yaga/tile-utils": "^1.0.0",
-    "babelify": "^8.0.0",
-    "get-form-data": "^2.0.0",
     "mapbox-gl": "^0.44.2",
-    "pretty-bytes": "^4.0.2",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
-    "streamsaver": "^1.0.1",
-    "tilelive-http": "^0.14.0",
-    "tilelive-streaming": "^0.7.7",
-    "tilelive-tar": "^1.0.0",
-    "timers": "^0.1.1"
+    "streamsaver": "^1.0.1"
   },
   "devDependencies": {
+    "babelify": "^8.0.0",
     "babel-core": "^6.26.3",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
