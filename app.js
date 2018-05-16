@@ -1,4 +1,4 @@
-import DownloadControl from 'mapbox-download-ctrl'
+import DownloadControl from 'mbgl-dl-ctrl'
 import MapboxglLayerControl from '@digidem/mapbox-gl-layers'
 import mapboxgl from 'mapbox-gl'
 import React from 'react'
