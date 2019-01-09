@@ -1,6 +1,6 @@
 {
   "name": "tile-download-ui",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "A user interface for downloading map tiles for offline use.",
   "main": "app.js",
   "repository": {
