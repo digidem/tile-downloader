@@ -2,11 +2,54 @@ import DownloadControl from 'mbgl-dl-ctrl'
 import MapboxglLayerControl from '@digidem/mapbox-gl-layers'
 import mapboxgl from 'mapbox-gl'
 import React from 'react'
-import StreamSaver from 'streamsaver'
+import styled from 'styled-components'
+
+const Unsupported = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+
+  .text {
+    text-align: center;
+    padding: 50px;
+    margin: auto;
+    background-color: rgb(248, 215, 218);
+  }
+`
+
+const Style = styled.div`
+  .github-corner:hover .octo-arm {
+    animation: octocat-wave 560ms ease-in-out;
+  }
+  @keyframes octocat-wave {
+    0%,
+    100% {
+      transform: rotate(0);
+    }
+    20%,
+    60% {
+      transform: rotate(-25deg);
+    }
+    40%,
+    80% {
+      transform: rotate(10deg);
+    }
+  }
+  @media (max-width: 500px) {
+    .github-corner:hover .octo-arm {
+      animation: none;
+    }
+    .github-corner .octo-arm {
+      animation: octocat-wave 560ms ease-in-out;
+    }
+  }
+`
 
 export default class App extends React.Component {
   componentDidMount () {
-    var accessToken = 'pk.eyJ1Ijoia3JtY2tlbHYiLCJhIjoiY2lxbHpscXo5MDBlMGdpamZnN21mOXF3MCJ9.BtXlq8OmTEM8fHqWuxicPQ';
+    if (!document.getElementById('map')) return
+    var accessToken = 'pk.eyJ1Ijoia3JtY2tlbHYiLCJhIjoiY2lxbHpscXo5MDBlMGdpamZnN21mOXF3MCJ9.BtXlq8OmTEM8fHqWuxicPQ'
     mapboxgl.accessToken = accessToken
 
     const bingSource = {
@@ -53,26 +96,22 @@ export default class App extends React.Component {
       var downloadControl = new DownloadControl()
       map.addControl(downloadControl, 'bottom-left')
     })
-
   }
 
   render () {
-    var text = 'Click here to download tiles in this area...'
-    if (!StreamSaver.supported) text = 'Please use the latest version of Google Chrome'
-    return (
-    <div>
-      <div id='bar' className='top'>
-        <div id='bar-inner'>
-          {StreamSaver.supported ? '' : <div id='buttons'>{text}</div>}
+    var isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+    if (!('caches' in window) || typeof ReadableStream === 'undefined' || isSafari) {
+      return <Unsupported>
+       <div className='text'>
+        Sorry, Tile Downloader isn't currently supported by your browser. Google Chrome should work.
         </div>
-      </div>
+      </Unsupported>
+    }
+
+    return (
+      <Style>
       <div id="map"></div>
-      <div id='attribution' className='bottom'>
-        <a target='_blank' href='http://github.com/karissa/tile-download-ui'>
-          <img src='github.png' />
-        </a>
-      </div>
-    </div>
+    </Style>
   )
   }
 }
