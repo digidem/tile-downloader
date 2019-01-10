@@ -1,8 +1,7 @@
-# tile-download-ui
+# tile-downloader
 
-A client-side user interface for selecting a region to download for use in
-offline tile scenarios. Downloads the tiles as a tar file directly to the
-filesystem as a tar stream without memory limits.
+Download tiles for a map region  without memory limits. Downloads the tiles as a tar file directly to the
+filesystem.
 
 Only works on Google Chrome.
 
