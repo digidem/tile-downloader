@@ -1,11 +1,11 @@
 {
-  "name": "tile-download-ui",
+  "name": "tile-downloader",
   "version": "2.0.0",
-  "description": "A user interface for downloading map tiles for offline use.",
+  "description": "Downloading map tiles without memory limits.",
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/karissa/tile-download-ui.git"
+    "url": "https://github.com/digdem/tile-downloader.git"
   },
   "scripts": {
     "start": "http-server public",
@@ -30,7 +30,7 @@
   "dependencies": {
     "@digidem/mapbox-gl-layers": "^2.0.0",
     "mapbox-gl": "^0.44.2",
-    "mbgl-dl-ctrl": "^2.0.0",
+    "mbgl-dl-ctrl": "^2.0.1",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "styled-components": "^4.1.3"

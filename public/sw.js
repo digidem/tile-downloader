@@ -13,8 +13,10 @@ self.addEventListener('fetch', function (event) {
   if (!event.request.url.startsWith(location.origin + '/export')) return
   event.respondWith(async function () {
     // Try to get the response from a cache.
-    const cachedResponse = await self.caches.match('map.png')
+    console.log('trying to get response')
+    const cachedResponse = await self.caches.match('tiles.tar')
     // Return it if we found one.
+    console.log('cachedResponse', cachedResponse)
     return new Response(cachedResponse.body, {
       status: 200,
       headers: {
